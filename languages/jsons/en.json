@@ -1,0 +1,66 @@
+{
+    "name": "English",
+    "menu": [
+        "/start - list of commands",
+        "/profile [username] - opens profile of the user",
+        "/posts [username] - open user posts",
+        "/stories [username] - open user stories",
+        "",
+        "Inline Mode",
+        "you can use it anywhere, just type @instaStalkieBot and then the username of the profile"
+    ],
+    "errors": {
+        "fail": "Error during the request of information",
+        "username_not_specified": "Specify the username",
+        "non_existent_profile": "Error during the request of information\n \u00bb Profile name invalid",
+        "private_account": "Private Account",
+        "no_stories": "Tagged User hasn't a story now",
+        "not_cached_post": "Post not in the cache",
+        "not_cached_story": "Story not in the cache",
+        "wrong_id": "Not authorized to use others' users messages. Send another message"
+    },
+    "keyboards": {
+        "settings": "Settings",
+        "view_online": "See online",
+        "back": "Back",
+        "no_comments": "No comments",
+        "no_likes": "No likes"
+    },
+    "languages": {
+        "language": "Language",
+        "click_to_choose": "Click here to choose the language:",
+        "choose_language": "Choose the new language:",
+        "changed_language": "Language changed successfully",
+        "redirect_text": "Click here to chose the language"
+    },
+    "profile": {
+        "full_name": "Name",
+        "category": "Category",
+        "biography": "Biography",
+        "following": "Follows",
+        "is_private": "Private",
+        "profile": "Profile",
+        "liked_from": "Liked by"
+    },
+    "posts": {
+        "previous": "Previous post",
+        "next": "Next post",
+        "view": "View posts",
+        "random": "Random post"
+    },
+    "stories": {
+        "previous": "Previous story",
+        "next": "Next story",
+        "view": "View stories",
+        "random": "Random story"
+    },
+    "status": {
+        "message": "Loading API status...",
+        "final": "API status:\n"
+    },
+    "loading": "Loading...",
+    "inline": {
+        "no_profiles_found": "No profiles found",
+        "change_query": "Try to use different keywords"
+    }
+}

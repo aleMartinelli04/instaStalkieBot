@@ -1,0 +1,66 @@
+{
+    "name": "Francais",
+    "menu": [
+        "/start - liste de commandes",
+        "/profile [username] - ouvre le profil",
+        "/posts [username] - ouvre les posts",
+        "/stories [username] - ouvre les histoires",
+        "",
+        "Inline Mode",
+        "vous pouvez l'utiliser n'importe o\u00c3\u00b9, m\u00c3\u00aame si le bot n'est pas dans le chat, en tapant simplement @instaStalkieBot puis le nom d'utilisateur de l'utilisateur"
+    ],
+    "errors": {
+        "fail": "Erreur lors de la r\u00e9cup\u00e9ration des informations",
+        "username_not_specified": "Sp\u00e9cifie le nom de l'utilisateur",
+        "non_existent_profile": "Erreur lors de la r\u00e9cup\u00e9ration des donn\u00e9es\n \u00bb Le profil n'existe pas",
+        "private_account": "Compte priv\u00e9",
+        "no_stories": "L'utilisateur tagu\u00e9 n'a pas d'histoires pour le moment",
+        "not_cached_post": "Message non pr\u00e9sent dans le cache",
+        "not_cached_story": "Histoire non pr\u00e9sent dans le cache",
+        "wrong_id": "Vous n'\u00c3\u00aates pas autoris\u00e9 \u00c3\u00a0 agir sur les publications d'autres utilisateurs, appelez d'abord votre propre message"
+    },
+    "keyboards": {
+        "settings": "Param\u00e8tres",
+        "view_online": "Voir en ligne",
+        "back": "Retour",
+        "no_comments": "Il n'y a pas de commentaires",
+        "no_likes": "Il n'y a pas des histoires"
+    },
+    "languages": {
+        "language": "Langue",
+        "click_to_choose": "Cliquez sur le bouton ci-dessous pour choisir la langue:",
+        "choose_language": "Choisissez la langue:",
+        "changed_language": "La langue a bien \u00e9t\u00e9 modifi\u00e9e",
+        "redirect_text": "Cliquez ici par choisir la langue"
+    },
+    "profile": {
+        "full_name": "Pr\u00e9nom",
+        "category": "Cat\u00e9gorie",
+        "biography": "Biographie",
+        "following": "\u00c3\u2021a suit",
+        "is_private": "Priv\u00e9",
+        "profile": "Profil",
+        "liked_from": "Aim\u00e9 par"
+    },
+    "posts": {
+        "previous": "Post pr\u00e9c\u00e9dent",
+        "next": "Post suivant",
+        "view": "Visualizer",
+        "random": "Post casual"
+    },
+    "stories": {
+        "previous": "Histoire pr\u00e9c\u00e9dent",
+        "next": "Histoire suivant",
+        "view": "Visualizer",
+        "random": "Histoire casual"
+    },
+    "status": {
+        "message": "Recuprement des informations par l'API...",
+        "final": "ete of th API:\n"
+    },
+    "loading": "Chargement...",
+    "inline": {
+        "no_profiles_found": "Aucun profil trouv\u00e9",
+        "change_query": "Essayez de changer vos mots cl\u00e9s"
+    }
+}

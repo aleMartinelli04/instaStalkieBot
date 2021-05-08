@@ -1,0 +1,66 @@
+{
+    "name": "Italiano",
+    "menu": [
+        "/start - lista dei comandi",
+        "/profile [username] - apre il profilo utente",
+        "/posts [username] - apre i post dell'utente",
+        "/stories [username] - apre le storie dell'utente",
+        "",
+        "Inline Mode",
+        "puoi usarla dovunque, anche se il bot non \u00c3\u00a8 nella chat, semplicemente digitando @instaStalkieBot e poi l'username dell'utente"
+    ],
+    "errors": {
+        "fail": "Errore nel recupero delle informazioni",
+        "username_not_specified": "Specifica l'username dell'utente",
+        "non_existent_profile": "Errore nel recupero dei dati\n \u00bb Profilo non esistente",
+        "private_account": "Account privato",
+        "no_stories": "L'utente taggato non ha storie al momento",
+        "not_cached_post": "Post non presente nella cache",
+        "not_cached_stories": "Storia non presente nella cache",
+        "wrong_id": "Non sei autorizzato a fare operazioni su post di altri utenti, chiama prima un tuo post"
+    },
+    "keyboards": {
+        "settings": "Impostazioni",
+        "view_online": "Vedi online",
+        "back": "Indietro",
+        "no_comments": "Nessun commento",
+        "no_likes": "Nessun like"
+    },
+    "languages": {
+        "language": "Lingua",
+        "click_to_choose": "Clicca sul bottone sottostante per scegliere la lingua:",
+        "choose_language": "Scegli la lingua:",
+        "changed_language": "Lingua cambiata con successo",
+        "redirect_text": "Clicca qua per scegliere la lingua"
+    },
+    "profile": {
+        "profile": "Profilo",
+        "full_name": "Nome",
+        "category": "Categoria",
+        "biography": "Biografia",
+        "following": "Segue",
+        "is_private": "Privato",
+        "liked_from": "Piace a"
+    },
+    "posts": {
+        "previous": "Post precedente",
+        "next": "Post successivo",
+        "view": "Visualizza post",
+        "random": "Post a caso"
+    },
+    "stories": {
+        "previous": "Storia precedente",
+        "next": "Storia successiva",
+        "view": "Visualizza storie",
+        "random": "Storia a caso"
+    },
+    "status": {
+        "message": "Recupero delle informazioni sullo stato dell'API...",
+        "final": "Stato dell'API:\n"
+    },
+    "loading": "Recupero informazioni...",
+    "inline": {
+        "no_profiles_found": "Nessun profilo trovato",
+        "change_query": "Prova a cambaire parole chiave"
+    }
+}
