@@ -15,7 +15,13 @@ cached_ids = {}
 
 @Client.on_message(filters.command("start"))
 async def on_start(_, message):
-    argument = message.command[1] if len(message.command) > 1 else ""
+    argument = " ".join(message.command[1:]) if len(message.command) > 1 else ""
+
+    if "profile" in argument:
+        username = argument[len("profile"):]
+
+        await on_profile(_, message, username)
+        return
 
     if argument == "languages":
         await on_languages(_, message)
@@ -64,6 +70,8 @@ async def on_posts(_, message):
         await message.reply_text(get_message(language, "errors/username_not_specified"))
         return
 
+    wait_message = await message.reply_text(get_message(language, "loading"))
+
     posts = get_user_posts(username)
 
     if posts == "Fail":
@@ -80,6 +88,11 @@ async def on_posts(_, message):
 
     keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
                                      message.from_user.language_code, message.from_user.id)
+
+    try:
+        await wait_message.delete()
+    except:
+        pass
 
     if post.is_video:
         message = await message.reply_video(post.source, caption=caption, reply_markup=keyboard)
@@ -108,6 +121,8 @@ async def on_stories(_, message):
         await message.reply_text(get_message(language, "errors/fail"))
         return
 
+    wait_message = await message.reply_text(get_message(language, "loading"))
+
     stories = _request_story(user["user_id"])
 
     if stories == "private_account":
@@ -126,6 +141,11 @@ async def on_stories(_, message):
 
     keyboard = create_keyboard_stories(username, len(iterator.collection), language, from_profile=False)
 
+    try:
+        await wait_message.delete()
+    except:
+        pass
+
     if story.type_story == "mp4/video/boomerang":
         message = await message.reply_video(story.url, caption=date, reply_markup=keyboard)
 
@@ -138,12 +158,15 @@ async def on_stories(_, message):
 
 
 @Client.on_message(filters.command("profile"))
-async def on_profile(_, message):
-    username = ' '.join(message.command[1:])
+async def on_profile(_, message, username: str = None):
+    if username is None:
+        username = ' '.join(message.command[1:])
 
     language = get_language(message.from_user.id, message.from_user.language_code)
 
     user = get_user_id(username)
+
+    wait_message = await message.reply_text(get_message(language, "loading"))
 
     if "user_id" not in user:
         await message.reply_text(get_message(language, "errors/non_existent_profile"))
@@ -160,6 +183,11 @@ async def on_profile(_, message):
     caption = create_caption_profile(profile, language)
 
     keyboard = create_keyboard_profile(profile.username, language, profile.is_private)
+
+    try:
+        await wait_message.delete()
+    except:
+        pass
 
     message = await message.reply_photo(profile.profile_pic, caption=caption, reply_markup=keyboard)
 

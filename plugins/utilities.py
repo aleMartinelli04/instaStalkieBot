@@ -101,11 +101,7 @@ def create_caption_profile(profile: Profile, language: str, use_link: bool = Fal
     if profile.full_name != "":
         caption.append(f"{get_message(language, 'profile/full_name')}: {profile.full_name}")
 
-    if use_link:
-        username = f"Username: <a href='{profile.profile_pic}'>{profile.username}</a>"
-
-    else:
-        username = f"Username: {profile.username}"
+    username = f"Username: {profile.username}"
 
     if profile.is_verified:
         username += " " + emoji.CHECK_MARK_BUTTON
@@ -124,6 +120,9 @@ def create_caption_profile(profile: Profile, language: str, use_link: bool = Fal
                   f"{get_message(language, 'profile/is_private')}: "
                   f"{emoji.THUMBS_UP if profile.is_private else emoji.CROSS_MARK}"]:
         caption.append(thing)
+
+    if use_link:
+        caption.append(f"<a href={profile.profile_pic}>‎</a>")
 
     return '\n\n'.join(caption)
 
@@ -155,7 +154,7 @@ def create_caption_likes(likes_json: List[dict], language: str) -> str:
 
         for like_json in likes_json:
             user = like_json["node"]["username"]
-            new_like = f'<b><a href="https://instagram.com/{user}">@{user}</a></b>'
+            new_like = f'<b><a href="https://t.me/instaStalkieBot?start=profile{user}">@{user}</a></b>'
 
             if not first_iteration:
                 new_like = f'\n{new_like}'
@@ -181,7 +180,8 @@ def create_caption_comments(comments_json: List[dict], language: str) -> str:
         for comment_json in comments_json:
             username = comment_json["node"]["owner"]["username"]
             text = comment_json["node"]["text"]
-            new_comment = f'<b><a href="https://instagram.com/{username}">@{username}</a></b>: {text}'
+            new_comment = f'<b><a href="https://t.me/instaStalkieBot?start=profile{username}">' \
+                          f'@{username}</a></b>: {text}'
 
             len_comment += len(new_comment)
 
