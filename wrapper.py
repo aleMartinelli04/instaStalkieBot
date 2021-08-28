@@ -49,16 +49,6 @@ class PostsIterator:
 
         return self.collection[self.index]
 
-    def random(self):
-        new_index = random.randint(0, len(self.collection))
-
-        while new_index == self.index:
-            new_index = random.randint(0, len(self.collection))
-
-        self.index = new_index
-
-        return self.collection[self.index]
-
 
 def _request(url: str, querystring: str) -> dict:
     """

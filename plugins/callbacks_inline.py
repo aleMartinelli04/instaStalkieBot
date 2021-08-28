@@ -51,16 +51,6 @@ class InlinePostsIterator:
 
         return self.collection[self.index]
 
-    def random(self):
-        new_index = random.randint(0, len(self.collection))
-
-        while new_index == self.index:
-            new_index = random.randint(0, len(self.collection))
-
-        self.index = new_index
-
-        return self.collection[self.index]
-
 
 class InlineStoriesIterator:
     def __init__(self, collection: List[Story], username: str):
@@ -81,16 +71,6 @@ class InlineStoriesIterator:
 
         if self.index < 0:
             self.index = len(self.collection) - 1
-
-        return self.collection[self.index]
-
-    def random(self):
-        new_index = random.randint(0, len(self.collection))
-
-        while new_index == self.index:
-            new_index = random.randint(0, len(self.collection))
-
-        self.index = new_index
 
         return self.collection[self.index]
 
