@@ -20,7 +20,7 @@ def create_keyboard_profile(username: str, language: str, is_private: bool = Fal
 
     keyboard.append([
         InlineKeyboardButton(get_message(language, "keyboards/view_online"),
-                             url=f"https://www.instagram.com/{username}")
+                             url=Link.from_username(username).link)
     ])
 
     return InlineKeyboardMarkup(keyboard)
@@ -43,8 +43,6 @@ def create_keyboard_posts(post_likes: int, post_comments: int, username: str, nu
         keyboard.append([
             InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'posts/previous')}",
                                  callback_data="previous_post" if not from_profile else "previous_post profile"),
-            InlineKeyboardButton(f"{emoji.GAME_DIE} {get_message(language, 'posts/random')}",
-                                 callback_data="random_post" if not from_profile else "previous_post profile"),
             InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'posts/next')}",
                                  callback_data="next_post" if not from_profile else "next_post profile")
         ])
@@ -57,7 +55,7 @@ def create_keyboard_posts(post_likes: int, post_comments: int, username: str, nu
     else:
         end_button = InlineKeyboardButton(
             f"{emoji.BOY_LIGHT_SKIN_TONE} {get_message(language, 'keyboards/view_online')}",
-            url=f"https://www.instagram.com/{username}"
+            url=Link.from_username(username).link
         )
 
     keyboard.append([end_button])
@@ -73,8 +71,6 @@ def create_keyboard_stories(username: str, num_stories: int, language: str,
         keyboard.append([
             InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'stories/previous')}",
                                  callback_data=f"previous_story profile" if from_profile else "previous_story"),
-            InlineKeyboardButton(f"{emoji.GAME_DIE} {get_message(language, 'stories/random')}",
-                                 callback_data="random_story" if not from_profile else "random_story profile"),
             InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'stories/next')}",
                                  callback_data=f"next_story profile" if from_profile else "next_story")
         ])
@@ -89,7 +85,7 @@ def create_keyboard_stories(username: str, num_stories: int, language: str,
     else:
         keyboard.append([
             InlineKeyboardButton(f"{emoji.BOY_LIGHT_SKIN_TONE} {get_message(language, 'profile/profile')}",
-                                 url=f"https://instagram.com/{username}")
+                                 url=Link.from_username(username).link)
         ])
 
     return InlineKeyboardMarkup(keyboard)
@@ -121,10 +117,12 @@ def create_caption_profile(profile: Profile, language: str, use_link: bool = Fal
                   f"{emoji.THUMBS_UP if profile.is_private else emoji.CROSS_MARK}"]:
         caption.append(thing)
 
-    if use_link:
-        caption.append(f"<a href={profile.profile_pic}>‎</a>")
+    caption = '\n\n'.join(caption)
 
-    return '\n\n'.join(caption)
+    if use_link:
+        caption += Link(profile.profile_pic).deeplink()
+
+    return caption
 
 
 def create_caption_posts(caption: str, date: datetime, views: int, is_video: bool = False, link: str = None) -> str:
@@ -134,7 +132,7 @@ def create_caption_posts(caption: str, date: datetime, views: int, is_video: boo
         start += " " + human_format(views) + " views"
 
     if link is not None:
-        start = f"<a href='{link}'>{start}</a>"
+        start = Link(link).deeplink(start)
 
     caption = start + "\n\n" + (caption if caption is not None else "")
 
@@ -154,8 +152,7 @@ def create_caption_likes(likes_json: List[dict], language: str) -> str:
 
         for like_json in likes_json:
             user = like_json["node"]["username"]
-            new_like = f'<b><a href="https://t.me/instaStalkieBot?start=profile{user}">@{user}</a></b>'
-
+            new_like = f"<b>{Link.start_instastalkie('profile', user).deeplink(f'@{user}')}</b>"
             if not first_iteration:
                 new_like = f'\n{new_like}'
             else:
@@ -180,9 +177,7 @@ def create_caption_comments(comments_json: List[dict], language: str) -> str:
         for comment_json in comments_json:
             username = comment_json["node"]["owner"]["username"]
             text = comment_json["node"]["text"]
-            new_comment = f'<b><a href="https://t.me/instaStalkieBot?start=profile{username}">' \
-                          f'@{username}</a></b>: {text}'
-
+            new_comment = f"<b>{Link.start_instastalkie('profile', username).deeplink(f'@{username}')}</b>: {text}"
             len_comment += len(new_comment)
 
             if len_comment <= 1000:
@@ -208,3 +203,20 @@ def format_date(date: datetime) -> str:
     date = f"<i>{date.day}/{date.month}/{date.year} {date.hour}:{minute}</i>"
 
     return date
+
+
+class Link:
+    def __init__(self, link: str):
+        self.link = link
+
+    @staticmethod
+    def from_username(username: str):
+        return Link(f"https://instagram.com/{username}")
+
+    @staticmethod
+    def start_instastalkie(keyword: str, username: str = ""):
+        username = username.replace(".", "-")
+        return Link(f"https://t.me/instaStalkieBot?start={keyword}{username}")
+
+    def deeplink(self, text: str = "‎"):
+        return f"<a href='{self.link}'>{text}</a>"

@@ -8,7 +8,7 @@ from classes import Post, Profile, Story
 from languages.languages import get_language, get_message
 from plugins.inline import inline_cached_posts, inline_cached_profiles, inline_cached_stories
 from plugins.utilities import create_caption_posts, create_caption_likes, create_caption_comments, \
-    create_caption_profile, format_date
+    create_caption_profile, format_date, Link
 from plugins.utilities_inline import create_keyboard_posts_from_inline, create_keyboard_profile_from_inline, \
     create_keyboard_stories_from_inline
 from wrapper import get_user_posts, get_public_post_liker, get_post_details, get_user_id, _request_story
@@ -439,7 +439,7 @@ async def open_stories_inline(client, callback):
 
     story = iterator.next() if iterator.index == -1 else iterator.collection[iterator.index]
 
-    date = f"<a href='{story.url}'>{format_date(story.taken_at)}</a>"
+    date = format_date(story.taken_at) + Link(story.url).deeplink()
 
     keyboard = create_keyboard_stories_from_inline(len(iterator.collection), language)
 
@@ -478,7 +478,7 @@ async def next_story_inline(client, callback):
 
     story = iterator.next()
 
-    caption = f"<a href='{story.url}'>{format_date(story.taken_at)}</a>"
+    caption = format_date(story.taken_at) + Link(story.url).deeplink()
 
     keyboard = create_keyboard_stories_from_inline(len(iterator.collection), language)
 
@@ -515,7 +515,7 @@ async def random_story_inline(client, callback):
 
     story = iterator.random()
 
-    caption = f"<a href='{story.url}'>{format_date(story.taken_at)}</a>"
+    caption = format_date(story.taken_at) + Link(story.url).deeplink()
 
     keyboard = create_keyboard_stories_from_inline(len(iterator.collection), language)
 
@@ -551,7 +551,7 @@ async def previous_story_inline(client, callback):
 
     story = iterator.previous()
 
-    caption = f"<a href='{story.url}'>{format_date(story.taken_at)}</a>"
+    caption = format_date(story.taken_at) + Link(story.url).deeplink()
 
     keyboard = create_keyboard_stories_from_inline(len(iterator.collection), language)
 

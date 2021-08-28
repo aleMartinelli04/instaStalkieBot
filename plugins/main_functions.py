@@ -4,7 +4,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from classes import StoriesIterator
 from languages.languages import get_language, get_flag, get_message
 from plugins.utilities import create_caption_posts, create_keyboard_posts, format_date, create_keyboard_stories, \
-    create_caption_profile, create_keyboard_profile
+    create_caption_profile, create_keyboard_profile, Link
 from wrapper import get_user_posts, PostsIterator, get_user_id, _request_story, get_email_and_details
 
 cached_posts = {}
@@ -19,6 +19,7 @@ async def on_start(_, message):
 
     if "profile" in argument:
         username = argument[len("profile"):]
+        username = username.replace("-", ".")
 
         await on_profile(_, message, username)
         return
@@ -53,7 +54,7 @@ async def on_languages(_, message):
 
         keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(emoji.LOCKED, url="https://t.me/instaStalkieBot?start=languages")
+                InlineKeyboardButton(emoji.LOCKED, url=Link.start_instastalkie("languages").link)
             ]
         ])
 

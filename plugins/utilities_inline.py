@@ -37,8 +37,6 @@ def create_keyboard_posts_from_inline(post_likes: int, post_comments: int, num_p
         keyboard.append([
             InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'posts/previous')}",
                                  callback_data="inline_previous_post"),
-            InlineKeyboardButton(f"{emoji.GAME_DIE} {get_message(language, 'posts/random')}",
-                                 callback_data="inline_random_post"),
             InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'posts/next')}",
                                  callback_data="inline_next_post")
         ])
@@ -56,8 +54,6 @@ def create_keyboard_stories_from_inline(num_stories: int, language: str) -> Inli
         keyboard.append([
             InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'stories/previous')}",
                                  callback_data="inline_previous_story"),
-            InlineKeyboardButton(f"{emoji.GAME_DIE} {get_message(language, 'stories/random')}",
-                                 callback_data="inline_random_story"),
             InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'stories/next')}",
                                  callback_data="inline_next_story")
         ])
