@@ -27,7 +27,8 @@ def create_keyboard_profile(username: str, language: str, is_private: bool = Fal
 
 
 def create_keyboard_posts(post_likes: int, post_comments: int, username: str, num_posts: int,
-                          language_code: str, user_id: int, from_profile: bool = False) -> InlineKeyboardMarkup:
+                          language_code: str, user_id: int, from_profile: bool,
+                          post_index: int, tot_posts: int, next_max_id: str) -> InlineKeyboardMarkup:
     language = get_language(user_id, language_code)
 
     keyboard = [
@@ -40,12 +41,18 @@ def create_keyboard_posts(post_likes: int, post_comments: int, username: str, nu
     ]
 
     if num_posts != 1:
-        keyboard.append([
-            InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'posts/previous')}",
-                                 callback_data="previous_post" if not from_profile else "previous_post profile"),
-            InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'posts/next')}",
-                                 callback_data="next_post" if not from_profile else "next_post profile")
-        ])
+        next_previous_keyboard = []
+
+        if post_index > 0:
+            next_previous_keyboard.append(
+                InlineKeyboardButton(f"{emoji.LEFT_ARROW} {get_message(language, 'posts/previous')}",
+                                     callback_data="previous_post" if not from_profile else "previous_post profile"))
+        if post_index < tot_posts-1 or (post_index == tot_posts-1 and next_max_id is not None):
+            next_previous_keyboard.append(
+                InlineKeyboardButton(f"{emoji.RIGHT_ARROW} {get_message(language, 'posts/next')}",
+                                     callback_data="next_post" if not from_profile else "next_post profile"))
+
+        keyboard.append(next_previous_keyboard)
 
     if from_profile:
         end_button = InlineKeyboardButton(

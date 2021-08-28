@@ -51,7 +51,8 @@ async def open_posts(_, callback):
     caption = create_caption_posts(post.caption, post.taken_at, post.views, post.is_video)
 
     keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
-                                     language, callback.from_user.id, from_profile=True)
+                                     language, callback.from_user.id, True, iterator.index, len(iterator.collection),
+                                     iterator.next_max_id)
 
     media = InputMediaVideo(post.source) if post.is_video else InputMediaPhoto(post.source)
     media.caption = caption

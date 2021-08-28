@@ -88,7 +88,8 @@ async def on_posts(_, message):
     caption = create_caption_posts(post.caption, post.taken_at, post.views, post.is_video)
 
     keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
-                                     message.from_user.language_code, message.from_user.id)
+                                     message.from_user.language_code, message.from_user.id, False, iterator.index,
+                                     len(iterator.collection), iterator.next_max_id)
 
     try:
         await wait_message.delete()

@@ -1,4 +1,3 @@
-import random
 from typing import List
 
 from pyrogram import Client, filters, emoji
@@ -299,43 +298,6 @@ async def previous_post_inline(client, callback):
     await client.edit_inline_text(key, caption, reply_markup=keyboard)
 
 
-@Client.on_callback_query(filters.regex("^inline_random_post$"))
-async def random_post_inline(client, callback):
-    key = callback.inline_message_id
-
-    iterator: InlinePostsIterator = inline_cached_posts.get(key)
-
-    language = get_language(callback.from_user.id, callback.from_user.language_code)
-
-    profile_userid: List[Profile, int] = inline_cached_profiles.get(key)
-
-    if profile_userid is None:
-        await callback.answer(get_message(language, "errors/not_cached_post"), show_alert=True)
-        await client.edit_inline_text(key, "@instaStalkieBot", reply_markup="")
-        return
-
-    right_user_id = profile_userid[1]
-
-    if callback.from_user.id != right_user_id:
-        await callback.answer(get_message(language, "errors/wrong_id"), show_alert=True)
-        return
-
-    if iterator is None:
-        await callback.answer(get_message(language, "errors/not_cached_post"), show_alert=True)
-        await client.edit_inline_text(key, "@instaStalkieBot", reply_markup="")
-        return
-
-    await callback.answer()
-
-    post = iterator.random()
-
-    caption = create_caption_posts(post.caption, post.taken_at, post.views, post.is_video, link=post.source)
-
-    keyboard = create_keyboard_posts_from_inline(post.likes, post.comment_number, len(iterator.collection), language)
-
-    await client.edit_inline_text(key, caption, reply_markup=keyboard)
-
-
 @Client.on_callback_query(filters.regex("^inline_back$"))
 async def back_inline(client, callback):
     key = callback.inline_message_id
@@ -457,43 +419,6 @@ async def next_story_inline(client, callback):
     await callback.answer()
 
     story = iterator.next()
-
-    caption = format_date(story.taken_at) + Link(story.url).deeplink()
-
-    keyboard = create_keyboard_stories_from_inline(len(iterator.collection), language)
-
-    await client.edit_inline_text(key, caption, reply_markup=keyboard)
-
-
-@Client.on_callback_query(filters.regex("^inline_random_story$"))
-async def random_story_inline(client, callback):
-    key = callback.inline_message_id
-
-    iterator: InlineStoriesIterator = inline_cached_stories.get(key)
-
-    language = get_language(callback.from_user.id, callback.from_user.language_code)
-
-    profile_userid: List[Profile, int] = inline_cached_profiles.get(key)
-
-    if profile_userid is None:
-        await callback.answer(get_message(language, "errors/not_cached_post"), show_alert=True)
-        await client.edit_inline_text(key, "@instaStalkieBot", reply_markup="")
-        return
-
-    right_user_id = profile_userid[1]
-
-    if callback.from_user.id != right_user_id:
-        await callback.answer(get_message(language, "errors/wrong_id"), show_alert=True)
-        return
-
-    if iterator is None:
-        await callback.answer(get_message(language, "errors/not_cached_post"), show_alert=True)
-        await client.edit_inline_text(key, "@instaStalkieBot", reply_markup="")
-        return
-
-    await callback.answer()
-
-    story = iterator.random()
 
     caption = format_date(story.taken_at) + Link(story.url).deeplink()
 

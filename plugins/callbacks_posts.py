@@ -48,9 +48,9 @@ async def next_post(_, callback):
 
     from_profile = len(callback.data.split(' ')) > 1
 
-    keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username,
-                                     len(iterator.collection), callback.from_user.language_code,
-                                     callback.from_user.id, from_profile=from_profile)
+    keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
+                                     callback.from_user.language_code, callback.from_user.id, from_profile,
+                                     iterator.index, len(iterator.collection), iterator.next_max_id)
 
     media = InputMediaVideo(post.source) if post.is_video else InputMediaPhoto(post.source)
     media.caption = caption
@@ -94,55 +94,9 @@ async def previous_post(_, callback):
 
     from_profile = len(callback.data.split(' ')) > 1
 
-    keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username,
-                                     len(iterator.collection), callback.from_user.language_code,
-                                     callback.from_user.id, from_profile=from_profile)
-
-    media = InputMediaVideo(post.source) if post.is_video else InputMediaPhoto(post.source)
-    media.caption = caption
-
-    await callback.edit_message_media(media, reply_markup=keyboard)
-
-
-@Client.on_callback_query(filters.regex("^random_post"))
-async def random_post(_, callback):
-    message_id = callback.message.message_id
-    chat_id = callback.message.chat.id
-
-    key = f"{chat_id}_{message_id}"
-
-    iterator: PostsIterator = cached_posts.get(key)
-
-    language = get_language(callback.from_user.id, callback.from_user.language_code)
-
-    if iterator is None:
-        await callback.answer(get_message(language, "errors/not_cached_post"), show_alert=True)
-        await callback.edit_message_text("", reply_markup="")
-        return
-
-    if iterator.right_user_id is None:
-        iterator.right_user_id = cached_ids.get(key)
-
-        if iterator.right_user_id is None:
-            await callback.answer(get_message(language, "errors/not_cached_stories"), show_alert=True)
-            await callback.edit_message_text("", reply_markup="")
-            return
-
-    if callback.from_user.id != iterator.right_user_id:
-        await callback.answer(get_message(language, "errors/wrong_id"), show_alert=True)
-        return
-
-    await callback.answer()
-
-    post: Post = iterator.random()
-
-    caption = create_caption_posts(post.caption, post.taken_at, post.views, post.is_video)
-
-    from_profile = len(callback.data.split(' ')) > 1
-
-    keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username,
-                                     len(iterator.collection), callback.from_user.language_code,
-                                     callback.from_user.id, from_profile=from_profile)
+    keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
+                                     callback.from_user.language_code, callback.from_user.id, from_profile,
+                                     iterator.index, len(iterator.collection), iterator.next_max_id)
 
     media = InputMediaVideo(post.source) if post.is_video else InputMediaPhoto(post.source)
     media.caption = caption
@@ -297,7 +251,8 @@ async def back(_, callback):
     from_profile = len(callback.data.split(' ')) > 1
 
     keyboard = create_keyboard_posts(post.likes, post.comment_number, iterator.username, len(iterator.collection),
-                                     callback.from_user.language_code, callback.from_user.id, from_profile=from_profile)
+                                     callback.from_user.language_code, callback.from_user.id, from_profile,
+                                     iterator.index, len(iterator.collection), iterator.next_max_id)
 
     await callback.edit_message_caption(caption)
     await callback.edit_message_reply_markup(keyboard)
