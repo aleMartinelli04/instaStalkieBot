@@ -228,8 +228,8 @@ async def on_link(_, message):
     keyboard = InlineKeyboardMarkup([
         [
             InlineKeyboardButton("Profile", url=Link.start_instastalkie("profile", username).link),
-            InlineKeyboardButton("Stories", url=Link.start_instastalkie("stories", username).link),
-            InlineKeyboardButton("Posts", url=Link.start_instastalkie("posts", username).link)
+            InlineKeyboardButton("Posts", url=Link.start_instastalkie("posts", username).link),
+            InlineKeyboardButton("Stories", url=Link.start_instastalkie("stories", username).link)
         ]
     ])
 
