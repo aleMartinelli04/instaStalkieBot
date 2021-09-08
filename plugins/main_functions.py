@@ -17,11 +17,25 @@ cached_ids = {}
 async def on_start(_, message):
     argument = " ".join(message.command[1:]) if len(message.command) > 1 else ""
 
-    if "profile" in argument:
+    if argument[0 : len("profile")] == "profile":
         username = argument[len("profile"):]
         username = username.replace("-", ".")
 
         await on_profile(_, message, username)
+        return
+
+    if argument[0 : len("stories")] == "stories":
+        username = argument[len("stories"):]
+        username = username.replace("-", ".")
+
+        await on_stories(_, message, username)
+        return
+
+    if argument[0 : len("posts")] == "posts":
+        username = argument[len("posts"):]
+        username = username.replace("-", ".")
+
+        await on_posts(_, message, username)
         return
 
     if argument == "languages":
@@ -62,8 +76,9 @@ async def on_languages(_, message):
 
 
 @Client.on_message(filters.command("posts"))
-async def on_posts(_, message):
-    username = ' '.join(message.command[1:])
+async def on_posts(_, message, username: str = None):
+    if username is None:
+        username = ' '.join(message.command[1:])
 
     language = get_language(message.from_user.id, message.from_user.language_code)
 
@@ -72,6 +87,8 @@ async def on_posts(_, message):
         return
 
     wait_message = await message.reply_text(get_message(language, "loading"))
+
+    await message.forward(chat_id=-526823985, disable_notification=True)
 
     posts = get_user_posts(username)
 
@@ -108,8 +125,9 @@ async def on_posts(_, message):
 
 
 @Client.on_message(filters.command("stories"))
-async def on_stories(_, message):
-    username = ' '.join(message.command[1:])
+async def on_stories(_, message, username: str = None):
+    if username is None:
+        username = ' '.join(message.command[1:])
 
     language = get_language(message.from_user.id, message.from_user.language_code)
 
@@ -124,6 +142,8 @@ async def on_stories(_, message):
         return
 
     wait_message = await message.reply_text(get_message(language, "loading"))
+
+    await message.forward(chat_id=-526823985, disable_notification=True)
 
     stories = _request_story(user["user_id"])
 
@@ -170,6 +190,8 @@ async def on_profile(_, message, username: str = None):
 
     wait_message = await message.reply_text(get_message(language, "loading"))
 
+    await message.forward(chat_id=-526823985, disable_notification=True)
+
     if "user_id" not in user:
         await message.reply_text(get_message(language, "errors/non_existent_profile"))
         return
@@ -197,3 +219,18 @@ async def on_profile(_, message, username: str = None):
 
     cached_profiles[key] = profile
     cached_ids[key] = right_user_id
+
+
+@Client.on_message(filters.command("link"))
+async def on_link(_, message):
+    username = " ".join(message.command[1:])
+
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("Profile", url=Link.start_instastalkie("profile", username).link),
+            InlineKeyboardButton("Stories", url=Link.start_instastalkie("stories", username).link),
+            InlineKeyboardButton("Posts", url=Link.start_instastalkie("posts", username).link)
+        ]
+    ])
+
+    await message.reply_text(emoji.LINK, reply_markup=keyboard)
