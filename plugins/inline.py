@@ -4,7 +4,7 @@ from pyrogram import Client, emoji
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, ChosenInlineResult, InlineQuery, \
     InlineKeyboardMarkup, InlineKeyboardButton
 
-from classes import Profile
+from classes.Profile import Profile
 from languages.languages import get_message, get_language
 from plugins.utilities import create_caption_profile
 from plugins.utilities_inline import create_keyboard_profile_from_inline

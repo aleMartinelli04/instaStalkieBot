@@ -3,75 +3,17 @@ from typing import List
 from pyrogram import Client, filters, emoji
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from classes import Post, Profile, Story
+from classes.InlinePostsIterator import InlinePostsIterator
+from classes.InlineStoriesIterator import InlineStoriesIterator
+from classes.Profile import Profile
 from languages.languages import get_language, get_message
 from plugins.inline import inline_cached_posts, inline_cached_profiles, inline_cached_stories
 from plugins.utilities import create_caption_posts, create_caption_likes, create_caption_comments, \
-    create_caption_profile, format_date, Link
+    create_caption_profile, format_date
+from classes.Link import Link
 from plugins.utilities_inline import create_keyboard_posts_from_inline, create_keyboard_profile_from_inline, \
     create_keyboard_stories_from_inline
 from wrapper import get_user_posts, get_public_post_liker, get_post_details, get_user_id, _request_story
-
-
-class InlinePostsIterator:
-    def __init__(self, collection: List[Post], username: str, next_max_id: str):
-        self.collection = collection
-        self.username = username
-        self.next_max_id = next_max_id
-        self.index = -1
-
-    def next(self):
-        self.index += 1
-
-        if self.index >= len(self.collection):
-            if self.next_max_id is not None:
-                response = get_user_posts(self.username, self.next_max_id)
-
-                if response == "Fail":
-                    self.index -= 1
-                    return "Fail"
-
-                post_list = response["post_list"]
-
-                for post in post_list:
-                    self.collection.append(post)
-
-                self.next_max_id = response.get("next_max_id")
-            else:
-                self.index = 0
-
-        return self.collection[self.index]
-
-    def previous(self):
-        self.index -= 1
-
-        if self.index < 0:
-            self.index = len(self.collection) - 1
-
-        return self.collection[self.index]
-
-
-class InlineStoriesIterator:
-    def __init__(self, collection: List[Story], username: str):
-        self.collection = collection
-        self.username = username
-        self.index = -1
-
-    def next(self):
-        self.index += 1
-
-        if self.index >= len(self.collection):
-            self.index = 0
-
-        return self.collection[self.index]
-
-    def previous(self):
-        self.index -= 1
-
-        if self.index < 0:
-            self.index = len(self.collection) - 1
-
-        return self.collection[self.index]
 
 
 @Client.on_callback_query(filters.regex("^inline-open-posts "))

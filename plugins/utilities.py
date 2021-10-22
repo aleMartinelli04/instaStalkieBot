@@ -4,8 +4,9 @@ from typing import List
 from pyrogram import emoji
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from classes import Profile
+from classes.Profile import Profile
 from languages.languages import get_language, get_message
+from classes.Link import Link
 
 
 def create_keyboard_profile(username: str, language: str, is_private: bool = False) -> InlineKeyboardMarkup:
@@ -210,20 +211,3 @@ def format_date(date: datetime) -> str:
     date = f"<i>{date.day}/{date.month}/{date.year} {date.hour}:{minute}</i>"
 
     return date
-
-
-class Link:
-    def __init__(self, link: str):
-        self.link = link
-
-    @staticmethod
-    def from_username(username: str):
-        return Link(f"https://instagram.com/{username}")
-
-    @staticmethod
-    def start_instastalkie(keyword: str, username: str = ""):
-        username = username.replace(".", "-")
-        return Link(f"https://t.me/instaStalkieBot?start={keyword}{username}")
-
-    def deeplink(self, text: str = "‎"):
-        return f"<a href='{self.link}'>{text}</a>"

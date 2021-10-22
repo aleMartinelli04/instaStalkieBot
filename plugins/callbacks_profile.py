@@ -1,12 +1,16 @@
 from pyrogram import Client, filters
 from pyrogram.types import InputMediaVideo, InputMediaPhoto
 
-from classes import StoriesIterator, Profile, Post, Story
+from classes.StoriesIterator import StoriesIterator
+from classes.Story import Story
+from classes.Post import Post
+from classes.Profile import Profile
 from languages.languages import get_language, get_message
 from plugins.main_functions import cached_posts, cached_profiles, cached_stories, cached_ids
 from plugins.utilities import create_caption_posts, create_keyboard_posts, create_caption_profile, \
     create_keyboard_profile, format_date, create_keyboard_stories
-from wrapper import get_user_posts, PostsIterator, get_user_id, _request_story
+from wrapper import get_user_posts, get_user_id, _request_story
+from classes.PostsIterator import PostsIterator
 
 
 @Client.on_callback_query(filters.regex("^open-posts "))

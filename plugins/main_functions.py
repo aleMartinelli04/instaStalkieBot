@@ -1,11 +1,13 @@
 from pyrogram import Client, filters, emoji
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from classes import StoriesIterator
+from classes.StoriesIterator import StoriesIterator
 from languages.languages import get_language, get_flag, get_message
 from plugins.utilities import create_caption_posts, create_keyboard_posts, format_date, create_keyboard_stories, \
-    create_caption_profile, create_keyboard_profile, Link
-from wrapper import get_user_posts, PostsIterator, get_user_id, _request_story, get_email_and_details
+    create_caption_profile, create_keyboard_profile
+from classes.Link import Link
+from wrapper import get_user_posts, get_user_id, _request_story, get_email_and_details
+from classes.PostsIterator import PostsIterator
 
 cached_posts = {}
 cached_stories = {}

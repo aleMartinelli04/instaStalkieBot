@@ -1,11 +1,12 @@
 from pyrogram import Client, filters, emoji
 from pyrogram.types import InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
 
-from classes import Post
+from classes.Post import Post
 from languages.languages import get_language, get_message
 from plugins.main_functions import cached_posts, cached_ids
 from plugins.utilities import create_caption_posts, create_keyboard_posts, create_caption_likes, create_caption_comments
-from wrapper import get_post_details, get_public_post_liker, PostsIterator
+from wrapper import get_post_details, get_public_post_liker
+from classes.PostsIterator import PostsIterator
 
 
 @Client.on_callback_query(filters.regex("^next_post"))

@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import InputMediaVideo, InputMediaPhoto
 
-from classes import StoriesIterator
+from classes.StoriesIterator import StoriesIterator
 from languages.languages import get_language, get_message
 from plugins.main_functions import cached_stories, cached_ids
 from plugins.utilities import format_date, create_keyboard_stories
