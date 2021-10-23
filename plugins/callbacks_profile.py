@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import InputMediaVideo, InputMediaPhoto
 
+from classes.StatusResponse import StatusResponse
 from classes.StoriesIterator import StoriesIterator
 from classes.Story import Story
 from classes.Post import Post
@@ -90,17 +91,13 @@ async def open_stories(_, callback):
     if iterator is None:
         user = get_user_id(username)
 
-        if "username" not in user:
+        if user == StatusResponse.INVALID_USERNAME:
             await callback.answer(get_message(language, "errors/fail"))
             return
 
-        stories = _request_story(user["user_id"])
+        stories = _request_story(int(user))
 
-        if stories == "private_account":
-            await callback.answer(get_message(language, "errors/private_account"))
-            return
-
-        if stories == "no_stories":
+        if stories == StatusResponse.NO_STORIES:
             await callback.answer(get_message(language, "errors/no_stories"))
             return
 

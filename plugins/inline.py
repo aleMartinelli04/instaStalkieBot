@@ -5,6 +5,7 @@ from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, Ch
     InlineKeyboardMarkup, InlineKeyboardButton
 
 from classes.Profile import Profile
+from classes.StatusResponse import StatusResponse
 from languages.languages import get_message, get_language
 from plugins.utilities import create_caption_profile
 from plugins.utilities_inline import create_keyboard_profile_from_inline
@@ -80,11 +81,11 @@ async def on_chosen_inline_result(client, chosen_result: ChosenInlineResult):
 
     profile_id = get_user_id(username)
 
-    if "username" not in profile_id:
+    if profile_id == StatusResponse.INVALID_USERNAME:
         await client.edit_inline_text(message_id, get_message(language, "errors/fail"))
         return
 
-    profile: Profile = get_email_and_details(profile_id["user_id"])
+    profile: Profile = get_email_and_details(int(profile_id))
 
     if profile == "error":
         await client.edit_inline_text(message_id, get_message(language, "errors/fail"))

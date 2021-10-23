@@ -7,6 +7,7 @@ import requests
 
 from classes.Post import Post
 from classes.Profile import Profile
+from classes.StatusResponse import StatusResponse
 from classes.Story import Story
 from config import HEADERS, HEADERS_STORIES
 
@@ -28,7 +29,7 @@ def _request(url: str, querystring: str) -> dict:
     return r
 
 
-def _request_story(user_id: int) -> Union[str, List[Story]]:
+def _request_story(user_id: int) -> Union[StatusResponse, List[Story]]:
     url = "https://instagram-stories1.p.rapidapi.com/v1/get_stories"
 
     querystring = {"userid": user_id}
@@ -36,12 +37,12 @@ def _request_story(user_id: int) -> Union[str, List[Story]]:
     r = requests.get(url, headers=(HEADERS_STORIES[0]), params=querystring).json()
 
     if r["status"] == "Fail":
-        return "fail"
+        return StatusResponse.FAIL
 
     stories_list_json = r["downloadLinks"]
 
     if len(stories_list_json) == 0:
-        return "no_stories"
+        return StatusResponse.NO_STORIES
 
     stories = []
 
@@ -55,7 +56,7 @@ def _request_story(user_id: int) -> Union[str, List[Story]]:
     return stories
 
 
-def get_user_id(username: str) -> dict:
+def get_user_id(username: str) -> Union[str, StatusResponse]:
     """
     Get the id by giving the username
 
@@ -68,7 +69,7 @@ def get_user_id(username: str) -> dict:
 
     response = requests.get(url, headers=random.choice(HEADERS), params=querystring).json()
 
-    return response
+    return response.get("user_id", StatusResponse.INVALID_USERNAME)
 
 
 def get_user_posts(username: str, next_max_id: str = None) -> dict:

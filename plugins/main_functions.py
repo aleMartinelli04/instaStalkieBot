@@ -1,6 +1,8 @@
 from pyrogram import Client, filters, emoji
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+import config
+from classes.StatusResponse import StatusResponse
 from classes.StoriesIterator import StoriesIterator
 from languages.languages import get_language, get_flag, get_message
 from plugins.utilities import create_caption_posts, create_keyboard_posts, format_date, create_keyboard_stories, \
@@ -90,7 +92,7 @@ async def on_posts(_, message, username: str = None):
 
     wait_message = await message.reply_text(get_message(language, "loading"))
 
-    await message.forward(chat_id=-526823985, disable_notification=True)
+    await message.forward(chat_id=config.private_chat_id, disable_notification=True)
 
     posts = get_user_posts(username)
 
@@ -139,21 +141,17 @@ async def on_stories(_, message, username: str = None):
 
     user = get_user_id(username)
 
-    if "username" not in user:
+    if user == StatusResponse.INVALID_USERNAME:
         await message.reply_text(get_message(language, "errors/fail"))
         return
 
     wait_message = await message.reply_text(get_message(language, "loading"))
 
-    await message.forward(chat_id=-526823985, disable_notification=True)
+    await message.forward(chat_id=config.private_chat_id, disable_notification=True)
 
-    stories = _request_story(user["user_id"])
+    stories = _request_story(int(user))
 
-    if stories == "private_account":
-        await message.reply_text(get_message(language, "errors/private_account"))
-        return
-
-    if stories == "no_stories":
+    if stories == StatusResponse.NO_STORIES:
         await message.reply_text(get_message(language, "errors/no_stories"))
         return
 
@@ -192,13 +190,13 @@ async def on_profile(_, message, username: str = None):
 
     wait_message = await message.reply_text(get_message(language, "loading"))
 
-    await message.forward(chat_id=-526823985, disable_notification=True)
+    await message.forward(chat_id=config.private_chat_id, disable_notification=True)
 
-    if "user_id" not in user:
+    if user == StatusResponse.INVALID_USERNAME:
         await message.reply_text(get_message(language, "errors/non_existent_profile"))
         return
 
-    profile = get_email_and_details(user["user_id"])
+    profile = get_email_and_details(int(user))
 
     if profile == "error":
         await message.reply_text(get_message(language, "errors/non_existent_profile"))

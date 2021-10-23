@@ -6,6 +6,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from classes.InlinePostsIterator import InlinePostsIterator
 from classes.InlineStoriesIterator import InlineStoriesIterator
 from classes.Profile import Profile
+from classes.StatusResponse import StatusResponse
 from languages.languages import get_language, get_message
 from plugins.inline import inline_cached_posts, inline_cached_profiles, inline_cached_stories
 from plugins.utilities import create_caption_posts, create_caption_likes, create_caption_comments, \
@@ -303,17 +304,17 @@ async def open_stories_inline(client, callback):
     if iterator is None:
         user = get_user_id(username)
 
-        if "username" not in user:
+        if user == StatusResponse.INVALID_USERNAME:
             await callback.answer(get_message(language, "errors/fail"), show_alert=True)
             return
 
-        stories = _request_story(user["user_id"])
+        stories = _request_story(int(user))
 
-        if stories == "fail":
+        if stories == StatusResponse.FAIL:
             await callback.answer(get_message(language, "errors/fail"), show_alert=True)
             return
 
-        if stories == "no_stories":
+        if stories == StatusResponse.NO_STORIES:
             await callback.answer(get_message(language, "errors/no_stories"), show_alert=True)
             return
 
